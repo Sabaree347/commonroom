@@ -1,0 +1,7 @@
+one:
+  email: alex@example.com
+  encrypted_password: test-only-password
+
+two:
+  email: sam@example.com
+  encrypted_password: test-only-password

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Chatapp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Chatapp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <%= link_to root_path, class: "wordmark" do %>
+          <span class="wordmark-mark" aria-hidden="true">c.</span>
+          <span>commonroom</span>
+        <% end %>
+
+        <% if user_signed_in? %>
+          <div class="account-actions">
+            <span class="user-avatar" aria-hidden="true"><%= current_user.email.first.upcase %></span>
+            <span class="account-email"><%= current_user.email %></span>
+            <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-button" %>
+          </div>
+        <% else %>
+          <nav class="guest-actions" aria-label="Account">
+            <%= link_to "Sign in", new_user_session_path, class: "text-button" %>
+            <%= link_to "Create account", new_user_registration_path, class: "button button--small" %>
+          </nav>
+        <% end %>
+      </header>
+
+      <main class="main-content">
+        <% if notice.present? %>
+          <p class="flash flash--notice" role="status"><%= notice %></p>
+        <% end %>
+        <% if alert.present? %>
+          <p class="flash flash--alert" role="alert"><%= alert %></p>
+        <% end %>
+        <%= yield %>
+      </main>
+
+      <footer class="site-footer">A little more room for good conversation.</footer>
+    </div>
+  </body>
+</html>

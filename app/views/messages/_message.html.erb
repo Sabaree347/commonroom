@@ -1,0 +1,10 @@
+<article id="<%= dom_id(message) %>" class="message">
+  <span class="message-avatar" aria-hidden="true"><%= message.user.email.first.upcase %></span>
+  <div class="message-content">
+    <div class="message-meta">
+      <strong><%= message.user.email.split("@").first %></strong>
+      <%= time_tag message.created_at, message.created_at.strftime("%H:%M"), class: "message-time" %>
+    </div>
+    <div class="message-bubble"><%= simple_format(message.content) %></div>
+  </div>
+</article>

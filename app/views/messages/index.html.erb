@@ -1,0 +1,56 @@
+<% content_for :title, "The Commons | Commonroom" %>
+
+<%= turbo_stream_from "chat_room" %>
+
+<section class="chat-app" aria-labelledby="room-title">
+  <header class="room-heading">
+    <div class="room-heading-copy">
+      <div class="room-mark" aria-hidden="true">C</div>
+      <div>
+        <p class="eyebrow">COMMUNITY ROOM</p>
+        <h1 id="room-title">The Commons</h1>
+        <p class="room-description">A shared space to say hello, trade ideas, and catch up.</p>
+      </div>
+    </div>
+    <div class="room-status"><span class="status-dot"></span> Live conversation</div>
+  </header>
+
+  <section class="conversation-panel" aria-label="Conversation">
+    <div class="conversation-heading">
+      <div>
+        <h2>Room chat</h2>
+        <p>Messages are shared with everyone here.</p>
+      </div>
+      <span class="conversation-date"><%= Date.current.strftime("%A, %B %d").sub(" 0", " ") %></span>
+    </div>
+
+    <div id="chat_room" class="chat-log" role="log" aria-live="polite" aria-relevant="additions text">
+      <% if @messages.any? %>
+        <%= render @messages %>
+      <% else %>
+        <div class="empty-state">
+          <span class="empty-state-mark" aria-hidden="true">+</span>
+          <h3>Start the conversation</h3>
+          <p>There are no messages yet. Be the first to say hello.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="composer-wrap">
+      <% if @message.errors.any? %>
+        <p class="form-error" role="alert"><%= @message.errors.full_messages.to_sentence %></p>
+      <% end %>
+
+      <%= form_with(model: @message, class: "composer-form") do |form| %>
+        <%= form.label :content, "Write a message", class: "sr-only" %>
+        <%= form.text_area :content, rows: 1, maxlength: 1000, required: true,
+          placeholder: "Message the room...", autocomplete: "off",
+          aria: { describedby: "message-guidance" }, class: "composer-input" %>
+        <div class="composer-footer">
+          <span id="message-guidance" class="composer-guidance">Up to 1,000 characters</span>
+          <%= form.submit "Send message", class: "button send-button" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</section>
